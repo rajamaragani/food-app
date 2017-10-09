@@ -1,6 +1,13 @@
-package com.foodworld.pojo;
+/*******************************************************************************
+ *   * Copyright (C) 2017   Raja Maragani  rajamaragani@gmail.com
+ *   * 
+ *   * This file is part of foodapplication
+ *   * 
+ *   * foodapplication can not be copied and/or distributed without the express
+ *   * permission of Raja Maragani
+ ******************************************************************************/
 
-import java.util.Map;
+package com.foodworld.pojo;
 
 /**
  * 
@@ -8,14 +15,42 @@ import java.util.Map;
  *
  */
 public class Item {
-
+    private int id;
     private String type;
     private String itemName;
-    private float price;
-    private float discount;
-    private Map<String, Float> tax;
-    private String totalPrice;
+    private int price;
+    private int discount;
+    private int totalPrice;
     private String whichPriceShow;
+    private String itemLogo;
+    private int status;
+    private int itemQuantity;
+
+    public Item() {
+        super();
+    }
+
+    public Item(int id, String type, String itemName, int price, int discount, int totalPrice, String whichPriceShow,
+            String itemLogo, int status) {
+        super();
+        this.id = id;
+        this.type = type;
+        this.itemName = itemName;
+        this.price = price;
+        this.discount = discount;
+        this.totalPrice = totalPrice;
+        this.whichPriceShow = whichPriceShow;
+        this.itemLogo = itemLogo;
+        this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getType() {
         return type;
@@ -33,35 +68,27 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public float getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
-    public Map<String, Float> getTax() {
-        return tax;
-    }
-
-    public void setTax(Map<String, Float> tax) {
-        this.tax = tax;
-    }
-
-    public String getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -71,6 +98,30 @@ public class Item {
 
     public void setWhichPriceShow(String whichPriceShow) {
         this.whichPriceShow = whichPriceShow;
+    }
+
+    public String getItemLogo() {
+        return itemLogo;
+    }
+
+    public void setItemLogo(String itemLogo) {
+        this.itemLogo = itemLogo;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(int itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
 }

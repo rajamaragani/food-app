@@ -11,20 +11,16 @@ package com.foodworld.repository;
 
 import java.util.List;
 
-import com.foodworld.pojo.Restaurant;
+import com.foodworld.pojo.OrderDetails;
 
-public interface IRestaurantRepository {
+public interface IOrdersRepository {
 
-    Boolean createRestaurant(Restaurant restaurant);
+    List<OrderDetails> getOrderDetails(String condition);
 
-    Boolean updateRestaurant(Restaurant restaurant);
+    Boolean updateOrderDetails(OrderDetails orderDetails);
 
-    Boolean deleteRestaurant(String condition);
+    Boolean deleteOrderDetails(String condition);
 
-    List<Restaurant> getRestaurant(String condition);
-
-    List<Restaurant> getRestaurant();
-
-    Boolean updateRestaurantStatus(String id,int status);
+    Boolean createOrderDetails(OrderDetails orderDetails);
 
 }

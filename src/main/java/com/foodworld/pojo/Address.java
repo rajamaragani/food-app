@@ -1,3 +1,12 @@
+/*******************************************************************************
+ *   * Copyright (C) 2017   Raja Maragani  rajamaragani@gmail.com
+ *   * 
+ *   * This file is part of foodapplication
+ *   * 
+ *   * foodapplication can not be copied and/or distributed without the express
+ *   * permission of Raja Maragani
+ ******************************************************************************/
+
 package com.foodworld.pojo;
 
 /**
@@ -7,11 +16,24 @@ package com.foodworld.pojo;
  */
 public class Address {
 
+    public Address() {
+        super();
+    }
+
     private String street;
     private String location;
     private String city;
     private int pin;
     private String state;
+
+    public Address(String street, String location, String city, int pin, String state) {
+        super();
+        this.street = street;
+        this.location = location;
+        this.city = city;
+        this.pin = pin;
+        this.state = state;
+    }
 
     public String getStreet() {
         return street;

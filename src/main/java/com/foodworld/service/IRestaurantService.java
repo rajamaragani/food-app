@@ -1,3 +1,12 @@
+/*******************************************************************************
+ *   * Copyright (C) 2017   Raja Maragani  rajamaragani@gmail.com
+ *   * 
+ *   * This file is part of foodapplication
+ *   * 
+ *   * foodapplication can not be copied and/or distributed without the express
+ *   * permission of Raja Maragani
+ ******************************************************************************/
+
 package com.foodworld.service;
 
 import java.io.IOException;
@@ -45,11 +54,9 @@ public interface IRestaurantService {
      * This method used for the update the Restaurant by restaurant id
      * 
      * @param restaurant
-     * @param restaurantId
      * @return
-     * @throws JsonProcessingException
      */
-    Boolean updateRestaurant(Restaurant restaurant, String restaurantId) throws JsonProcessingException;
+    Boolean updateRestaurant(Restaurant restaurant);
 
     /**
      * This method is used for the delete the restaurant by id
@@ -59,5 +66,9 @@ public interface IRestaurantService {
      * @throws JsonProcessingException
      */
     Boolean deleteRestaurant(String restaurantId) throws JsonProcessingException;
+
+    List<Restaurant> getRestaurantByCity() throws JsonParseException, JsonMappingException, IOException;
+
+    Boolean updateRestaurantStatus(String restaurantId, int status);
 
 }
