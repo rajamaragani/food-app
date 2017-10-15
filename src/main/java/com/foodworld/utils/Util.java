@@ -18,7 +18,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class Util {
 
-    static DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm:ss");
+    static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+    
 
     public static String generateUUID() {
 

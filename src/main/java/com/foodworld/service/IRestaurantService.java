@@ -70,5 +70,12 @@ public interface IRestaurantService {
     List<Restaurant> getRestaurantByCity() throws JsonParseException, JsonMappingException, IOException;
 
     Boolean updateRestaurantStatus(String restaurantId, int status);
+    /**
+     * This method used for the update the Item status 
+     * @param restaurantId
+     * @param status
+     * @return
+     */
+    Boolean updateItemStatus(String restaurantId,String ItemId, int status);
 
 }

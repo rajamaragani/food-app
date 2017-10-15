@@ -26,4 +26,6 @@ public interface IOtpService {
      */
     boolean verifyOtp(String phoneNumber, String timestamp, String otp);
 
+    String getSMSBalance();
+
 }

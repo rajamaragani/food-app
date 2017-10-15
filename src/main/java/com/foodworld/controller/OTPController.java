@@ -126,4 +126,19 @@ public class OTPController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @RequestMapping(value = "/admin/get/sms_balance", method = RequestMethod.GET)
+    @ApiOperation("Get SMS Balance")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
+            @ApiResponse(code = 404, message = "Unable to get sms balance"),
+            @ApiResponse(code = 405, message = "Invalid MobileNumber") })
+    public ResponseEntity<FoodAppResponse> getSMSBalance() {
+        try {
+            LOGGER.debug("Start getSMSBalance");
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("", otpService.getSMSBalance()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Got exception in sent otp");
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Internal server issue", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

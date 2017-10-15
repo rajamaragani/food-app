@@ -70,7 +70,7 @@ public class UsersRepository implements IUsersRepository {
         int update1 = jdbcTemplate.update(sql1, user.getPhoneNumber(), user.getName(), user.getEmail(),
                 user.getPassword(), user.get_id());
 
-        String sql = "UPDATE USER_ADDRESS SET STREET=?, LOCATION=?,PIN=?,CITY=?,STATE=? WHERE USER_ID";
+        String sql = "UPDATE USER_ADDRESS SET STREET=?, LOCATION=?,PIN=?,CITY=?,STATE=? WHERE USER_ID=?";
         int update = jdbcTemplate.update(sql, user.getAddress().getStreet(), user.getAddress().getLocation(),
                 user.getAddress().getPin(), user.getAddress().getCity(), user.getAddress().getState(), user.get_id());
         if (update > 0 && update1 > 0)

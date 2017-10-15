@@ -58,7 +58,17 @@ public class OrdersRepository implements IOrdersRepository {
 
     @Override
     public List<OrderDetails> getOrderDetails(String condition) {
-        List<OrderDetails> result = jdbcTemplate.query("SELECT * FROM ORDER_DETAILS " + condition, orderMappers);
+        List<OrderDetails> result = jdbcTemplate.query("SELECT *, 0 AS ORDER_DELIVERY_REMAIN_TIME FROM ORDER_DETAILS " + condition, orderMappers);
+        return result;
+    }
+    @Override
+    public List<OrderDetails> getTodayOrderDetails() {
+        List<OrderDetails> result = jdbcTemplate.query("SELECT O.*, (R.DELIVERY_TIME-(TIME_TO_SEC(NOW()) - TIME_TO_SEC(O.ORDERED_TIME))/60) AS ORDER_DELIVERY_REMAIN_TIME FROM ORDER_DETAILS O, RESTAURANT R WHERE R.ID=O.REST_ID AND DATE(O.ORDERED_TIME) = DATE(NOW())", orderMappers);
+        return result;
+    }
+    @Override
+    public List<OrderDetails> getOneWeekOrderDetails() {
+        List<OrderDetails> result = jdbcTemplate.query("SELECT *, 0 AS ORDER_DELIVERY_REMAIN_TIME FROM ORDER_DETAILS WHERE DATE(ORDERED_TIME) > DATE_SUB(NOW(), INTERVAL 1 WEEK)", orderMappers);
         return result;
     }
 
@@ -93,6 +103,16 @@ public class OrdersRepository implements IOrdersRepository {
             return true;
         return false;
 
+    }
+
+    @Override
+    public Boolean updateOrderStatus(String orderDetailsId, String status) {
+        String sql = "UPDATE ORDER_DETAILS SET ORDER_STATUS=? WHERE ID=?";
+        int update = jdbcTemplate.update(sql, status, orderDetailsId);
+        if (update > 0)
+            return true;
+        else
+            return false;
     }
 
 }

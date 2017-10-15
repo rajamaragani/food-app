@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.foodworld.pojo.Item;
 import com.foodworld.pojo.Restaurant;
@@ -22,6 +23,7 @@ import com.foodworld.row.mappers.ItemMapper;
 import com.foodworld.row.mappers.RestaurantMappers;
 
 @Service
+@Transactional
 public class RestaurantRepository implements IRestaurantRepository {
 
     @Autowired
@@ -98,7 +100,8 @@ public class RestaurantRepository implements IRestaurantRepository {
     @Override
     public Boolean updateRestaurant(Restaurant restaurant) {
 
-        String itemInsert = "UPDATE ITEM  SET TYPE=?,ITEMNAME=?,PRICE=?,DISCOUNT=?,TOTAL_PRICE=?,WHICH_PRICE_SHOW=?,ITEM_LOGO=?, STATUS=? WHERE ID=?";
+        final String deleteItemSql = "DELETE FROM ITEM WHERE RESTAURANT_ID = ?";
+        String itemInsert = "INSERT INTO ITEM (TYPE,ITEMNAME,PRICE,DISCOUNT,TOTAL_PRICE,WHICH_PRICE_SHOW,ITEM_LOGO,RESTAURANT_ID)  VALUES (?, ?, ?,?,?,?,?,?)";
         try {
             String sql1 = "UPDATE RESTAURANT SET TYPE=?,NAME=?,RESTLOGO=?,RATING=?,DELIVERY_TIME=?,DELIVERY_CHARGES=? ,STATUS=? WHERE ID=?";
             int update1 = jdbcTemplate.update(sql1, restaurant.getType(), restaurant.getName(),
@@ -110,11 +113,15 @@ public class RestaurantRepository implements IRestaurantRepository {
             int update = jdbcTemplate.update(sql, restaurant.getAddress().getStreet(),
                     restaurant.getAddress().getLocation(), restaurant.getAddress().getPin(),
                     restaurant.getAddress().getCity(), restaurant.getAddress().getState(), restaurant.get_id());
+            Object[] params = { restaurant.get_id() };
+            int[] types = { Types.VARCHAR };
 
+            int itemDeletedRows = jdbcTemplate.update(deleteItemSql, params, types);
             for (Item item : restaurant.getItems()) {
-                int updateItem = jdbcTemplate.update(itemInsert, item.getType(), item.getItemName(), item.getPrice(),
-                        item.getDiscount(), item.getTotalPrice(), item.getWhichPriceShow(), item.getItemLogo(),
-                        item.getStatus(), item.getId());
+                int updateItem = jdbcTemplate.update(itemInsert,
+                        new Object[] { item.getType(), item.getItemName(), item.getPrice(), item.getDiscount(),
+                                item.getTotalPrice(), item.getWhichPriceShow(), item.getItemLogo(),
+                                restaurant.get_id() });
 
             }
 
@@ -149,7 +156,7 @@ public class RestaurantRepository implements IRestaurantRepository {
     @Override
     public Boolean deleteRestaurant(String restId) {
         final String deleteItemSql = "DELETE FROM ITEM WHERE RESTAURANT_ID = ?";
-        final String deleteOrderSql = "DELETE FROM ORDER_DETAILS WHERE RESTAURANT_ID = ?";
+        final String deleteOrderSql = "DELETE FROM ORDER_DETAILS WHERE REST_ID = ?";
         final String deleteRESTAddressSql = "DELETE FROM REST_ADDRESS WHERE RESTAURANT_ID = ?";
         final String deleteRESTAURANTSql = "DELETE FROM RESTAURANT WHERE ID = ?";
         Object[] params = { restId };
@@ -166,6 +173,23 @@ public class RestaurantRepository implements IRestaurantRepository {
         if (restaurantDeletedRows > 0)
             return true;
         return false;
+
+    }
+
+    @Override
+    public Boolean updateItemStatus(String restaurantId, String itemId, int status) {
+
+        try {
+            String sql1 = "UPDATE ITEM SET STATUS=? WHERE ID=? AND RESTAURANT_ID=?";
+            int update1 = jdbcTemplate.update(sql1, status, itemId, restaurantId);
+            if (update1 > 0)
+                return true;
+            else
+                return false;
+        } catch (Exception e) {
+            System.out.println("Exception ::" + e.getLocalizedMessage());
+            return false;
+        }
 
     }
 

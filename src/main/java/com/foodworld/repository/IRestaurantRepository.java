@@ -27,4 +27,6 @@ public interface IRestaurantRepository {
 
     Boolean updateRestaurantStatus(String id,int status);
 
+    Boolean updateItemStatus(String restaurantId, String itemId, int status);
+
 }

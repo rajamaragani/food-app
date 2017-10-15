@@ -98,16 +98,21 @@ public class UserController {
     public ResponseEntity<FoodAppResponse> createUser(
             @ApiParam(value = "User json object that needs to be added to the database", required = true) @RequestBody User user) {
         try {
-            Boolean isInserted = userService.createUser(user);
+            User user2 = userService.getUserByPhoneNum(user.getPhoneNumber());
+            if (user2 != null) {
+                return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("User Already Existed", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+            user2 = userService.createUser(user);
             LOGGER.debug("Start Creating User");
-            if (!isInserted) {
+            if (user2 == null) {
                 LOGGER.info("User Not created");
                 LOGGER.debug("User not created for the user :" + user);
                 return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("User Not Inserted", null),
                         HttpStatus.BAD_REQUEST);
             }
             LOGGER.debug("End Create User");
-            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Inserted Successfully", null),
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Inserted Successfully", user2),
                     HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Got Exception in Creating User");

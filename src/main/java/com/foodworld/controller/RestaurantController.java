@@ -70,7 +70,7 @@ public class RestaurantController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     @RequestMapping(value = "/admin/all", method = { RequestMethod.GET })
     @ApiOperation("Get the all restaurants in a perticular city")
     @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
@@ -116,8 +116,6 @@ public class RestaurantController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    
 
     @RequestMapping(value = "/admin/", method = RequestMethod.POST)
     @ApiOperation("Create the new Restaurant")
@@ -170,26 +168,53 @@ public class RestaurantController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     @RequestMapping(value = "/admin/{restaurantId}/{status}", method = RequestMethod.PUT)
     @ApiOperation("update the Restaurant status by id")
     @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
             @ApiResponse(code = 404, message = "Restaurant not found"),
             @ApiResponse(code = 405, message = "Validation exception") })
-    public ResponseEntity<?> updateRestaurant(
+    public ResponseEntity<?> updateRestaurantStatus(
             @ApiParam(value = "restaurant id requied for update status", required = true) @PathVariable("restaurantId") String restaurantId,
-            @ApiParam(value = "current status for restaurant", required = true) @PathVariable("status") int status
-            ) {
+            @ApiParam(value = "current status for restaurant", required = true) @PathVariable("status") int status) {
         try {
-            LOGGER.debug("Start updateRestaurant");
-            Boolean isUpdated = restaurantService.updateRestaurantStatus(restaurantId,status);
+            LOGGER.debug("Start updateRestaurantStatus");
+            Boolean isUpdated = restaurantService.updateRestaurantStatus(restaurantId, status);
             if (!isUpdated) {
-                LOGGER.info("Unable to update Restaurant");
-                LOGGER.debug("Unable to update Restaurant  :" + restaurantId);
+                LOGGER.info("Unable to update Restaurant Status");
+                LOGGER.debug("Unable to update Restaurant Status :" + restaurantId);
                 return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Not Updated", null),
                         HttpStatus.BAD_REQUEST);
             }
-            LOGGER.debug("End updateRestaurant");
+            LOGGER.debug("End updateRestaurantStatus");
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Updated Successfully", null),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Got exception in updateRestaurant :" + e.getLocalizedMessage());
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Internal Server Issue", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/admin/{restaurantId}/{itemId}/{status}", method = RequestMethod.PUT)
+    @ApiOperation("update the Item Status status by itemId  and Restaurant Id")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
+            @ApiResponse(code = 404, message = "Restaurant not found"),
+            @ApiResponse(code = 405, message = "Validation exception") })
+    public ResponseEntity<?> updateItemStatus(
+            @ApiParam(value = "Restaurant id requied for update status", required = true) @PathVariable("restaurantId") String restaurantId,
+            @ApiParam(value = "Item id requied for update status", required = true) @PathVariable("itemId") String itemId,
+            @ApiParam(value = "current status for restaurant", required = true) @PathVariable("status") int status) {
+        try {
+            LOGGER.debug("Start updateItemStatus");
+            Boolean isUpdated = restaurantService.updateItemStatus(restaurantId, itemId, status);
+            if (!isUpdated) {
+                LOGGER.info("Unable to update Item Status");
+                LOGGER.debug("Unable to update Item Status  :" + restaurantId);
+                return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Not Updated", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+            LOGGER.debug("End updateItemStatus");
             return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Updated Successfully", null),
                     HttpStatus.OK);
         } catch (Exception e) {

@@ -70,4 +70,10 @@ public interface IOrderService {
 
     List<OrderDetails> getOrderDetailsByUserID(String userId);
 
+    Boolean updateOrderStatus(String orderDetailsId, String status);
+
+    List<OrderDetails> getTodayOrderDetails() throws JsonParseException, JsonMappingException, IOException;
+
+    List<OrderDetails> getLastOneWeekOrderDetails() throws JsonParseException, JsonMappingException, IOException;
+
 }

@@ -23,17 +23,20 @@ public class OrderDetails {
     private User user;
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderDetails.class);
     ObjectMapper mapper = new ObjectMapper();
+    private int orderRemainTimeInMin;
 
     public OrderDetails() {
         super();
     }
 
-    public OrderDetails(String _id, OrderStatus orderStatus, OrderInfo orderInfos, User user) {
+    public OrderDetails(String _id, OrderStatus orderStatus, OrderInfo orderInfos, User user,
+            int orderRemainTimeInMin) {
         super();
         this._id = _id;
         this.orderStatus = orderStatus;
         this.orderInfos = orderInfos;
         this.user = user;
+        this.orderRemainTimeInMin = orderRemainTimeInMin;
     }
 
     public String get_id() {
@@ -66,6 +69,14 @@ public class OrderDetails {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getOrderRemainTimeInMin() {
+        return orderRemainTimeInMin;
+    }
+
+    public void setOrderRemainTimeInMin(int orderRemainTimeInMin) {
+        this.orderRemainTimeInMin = orderRemainTimeInMin;
     }
 
     @Override

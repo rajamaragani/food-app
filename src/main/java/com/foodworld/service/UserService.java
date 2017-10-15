@@ -40,12 +40,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Boolean createUser(User user) throws JsonProcessingException {
+    public User createUser(User user) throws JsonProcessingException {
         if (user.get_id() == null)
             user.set_id(Util.generateUUID());
 
         user.setPassword(foodAppEncry.encrypt(user.getPassword()));
-        return usersRepository.createUser(user);
+        if (usersRepository.createUser(user))
+            return user;
+        else {
+            return null;
+        }
     }
 
     @Override

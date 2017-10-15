@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +24,7 @@ import com.foodworld.repository.IRestaurantRepository;
 import com.foodworld.utils.Util;
 
 @Service
+@Transactional
 public class RestaurantService implements IRestaurantService {
 
     @Autowired
@@ -34,10 +36,9 @@ public class RestaurantService implements IRestaurantService {
         List<Restaurant> restaurants = restaurantRepository.getRestaurant(" RD.CITY=\"" + city + "\"");
         return restaurants;
     }
-    
+
     @Override
-    public List<Restaurant> getRestaurantByCity()
-            throws JsonParseException, JsonMappingException, IOException {
+    public List<Restaurant> getRestaurantByCity() throws JsonParseException, JsonMappingException, IOException {
         List<Restaurant> restaurants = restaurantRepository.getRestaurant();
         return restaurants;
     }
@@ -51,7 +52,6 @@ public class RestaurantService implements IRestaurantService {
 
     @Override
     public Boolean createRestaurant(Restaurant restaurant) throws JsonProcessingException {
-        if (restaurant.get_id() == null)
             restaurant.set_id(Util.generateUUID());
         return restaurantRepository.createRestaurant(restaurant);
     }
@@ -60,13 +60,19 @@ public class RestaurantService implements IRestaurantService {
     public Boolean updateRestaurant(Restaurant restaurant) {
         return restaurantRepository.updateRestaurant(restaurant);
     }
+
     @Override
-    public Boolean updateRestaurantStatus(String restaurantId,int status) {
-        return restaurantRepository.updateRestaurantStatus(restaurantId,status);
+    public Boolean updateRestaurantStatus(String restaurantId, int status) {
+        return restaurantRepository.updateRestaurantStatus(restaurantId, status);
     }
 
     @Override
     public Boolean deleteRestaurant(String restaurantId) {
         return restaurantRepository.deleteRestaurant(restaurantId);
+    }
+
+    @Override
+    public Boolean updateItemStatus(String restaurantId, String ItemId, int status) {
+        return restaurantRepository.updateItemStatus(restaurantId, ItemId, status);
     }
 }

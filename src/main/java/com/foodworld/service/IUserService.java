@@ -36,7 +36,7 @@ public interface IUserService {
      * @return
      * @throws JsonProcessingException
      */
-    Boolean createUser(User user) throws JsonProcessingException;
+    User createUser(User user) throws JsonProcessingException;
 
     /**
      * This method used for the get the user by Uses ID

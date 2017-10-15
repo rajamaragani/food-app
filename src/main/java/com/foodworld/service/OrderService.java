@@ -35,6 +35,16 @@ public class OrderService implements IOrderService {
         List<OrderDetails> orderDetails = ordersRepository.getOrderDetails("");
         return orderDetails;
     }
+    @Override
+    public List<OrderDetails> getTodayOrderDetails() throws JsonParseException, JsonMappingException, IOException {
+        List<OrderDetails> orderDetails = ordersRepository.getTodayOrderDetails();
+        return orderDetails;
+    }
+    @Override
+    public List<OrderDetails> getLastOneWeekOrderDetails() throws JsonParseException, JsonMappingException, IOException {
+        List<OrderDetails> orderDetails = ordersRepository.getOneWeekOrderDetails();
+        return orderDetails;
+    }
 
     @Override
     public Boolean createOrderDetails(OrderDetails orderDetails) throws JsonProcessingException {
@@ -63,6 +73,11 @@ public class OrderService implements IOrderService {
     @Override
     public List<OrderDetails> getOrderDetailsByUserID(String userId) {
         return ordersRepository.getOrderDetails("WHERE USER_ID=\"" + userId+"\"");
+    }
+
+    @Override
+    public Boolean updateOrderStatus(String orderDetailsId, String status) {
+        return ordersRepository.updateOrderStatus(orderDetailsId, status);
     }
 
 }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.foodworld.pojo.FoodAppResponse;
 import com.foodworld.pojo.OrderDetails;
+import com.foodworld.pojo.OrderStatus;
 import com.foodworld.service.IOrderService;
 
 import io.swagger.annotations.Api;
@@ -60,6 +61,50 @@ public class OrderController {
             return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("", list), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Got error in getOrderDetails error msg : " + e.getLocalizedMessage());
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Internal server issue", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping(value = "/admin/todayOrders", method = RequestMethod.GET)
+    @ApiOperation("Get the Today OrderDetails")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
+            @ApiResponse(code = 404, message = "Today OrderDetails not found") })
+    public ResponseEntity<FoodAppResponse> getTodayOrderDetails() {
+        try {
+            LOGGER.debug("Start getOrderDetails");
+            List<OrderDetails> list = orderService.getTodayOrderDetails();
+            if (list.isEmpty()) {
+                LOGGER.info("Records not found");
+                LOGGER.debug("End getTodayOrderDetails response empty list");
+                return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("OrderDetails not found", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+            LOGGER.debug("End getTodayOrderDetails with response");
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("", list), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Got error in getTodayOrderDetails error msg : " + e.getLocalizedMessage());
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Internal server issue", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping(value = "/admin/oneWeekOrders", method = RequestMethod.GET)
+    @ApiOperation("Get the Last One Week OrderDetails")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
+            @ApiResponse(code = 404, message = "Today OrderDetails not found") })
+    public ResponseEntity<FoodAppResponse> getLastOneWeekOrderDetails() {
+        try {
+            LOGGER.debug("Start getOrderDetails");
+            List<OrderDetails> list = orderService.getLastOneWeekOrderDetails();
+            if (list.isEmpty()) {
+                LOGGER.info("Records not found");
+                LOGGER.debug("End getLastOneWeekOrderDetails response empty list");
+                return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("OrderDetails not found", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+            LOGGER.debug("End getLastOneWeekOrderDetails with response");
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("", list), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Got error in getLastOneWeekOrderDetails error msg : " + e.getLocalizedMessage());
             return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Internal server issue", null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -165,7 +210,32 @@ public class OrderController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @RequestMapping(value = "/admin/{orderDetailsId}/{status}", method = RequestMethod.PUT)
+    @ApiOperation("update the Order Status")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server issue"),
+            @ApiResponse(code = 404, message = "OrderDetails not found"),
+            @ApiResponse(code = 405, message = "Validation exception") })
+    public ResponseEntity<?> updateOrderStatus(
+            @ApiParam(value = "existing orderDetails id", required = true) @PathVariable("orderDetailsId") String orderDetailsId,
+            @ApiParam(value = "status", required = true) @PathVariable("status") OrderStatus status) {
+        try {
+            LOGGER.debug("Start updateOrderDetails");
+            Boolean isInserted = orderService.updateOrderStatus(orderDetailsId, status.toString());
+            if (!isInserted) {
+                LOGGER.info("Record not updated");
+                LOGGER.error("status not updated : " + status);
+                return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("OrderDetails Not Updated", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+            LOGGER.debug("End updateOrderDetails");
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Updated Successfully", null),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Got error in updateOrderDetails error msg : " + e.getLocalizedMessage());
+            return new ResponseEntity<FoodAppResponse>(new FoodAppResponse("Internal Server Issue", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @RequestMapping(value = "/admin/{orderDetailsId}", method = RequestMethod.DELETE)
     @ApiOperation("Delete the OrderDetails")
     @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid orderDetailsId supplied"),

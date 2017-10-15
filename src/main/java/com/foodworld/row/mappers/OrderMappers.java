@@ -54,7 +54,7 @@ public class OrderMappers implements RowMapper {
         return new OrderDetails(rs.getString("ID"), OrderStatus.valueOf(rs.getString("ORDER_STATUS")),
                 new OrderInfo(rs.getString("REST_NAME"), rs.getString("REST_ID"), rs.getString("FOODTYPE"),
                         items, rs.getString("ORDERED_TIME"), rs.getInt("TOTAL_AMOUNT")),
-                user.get(0));
+                user.get(0),rs.getInt("ORDER_DELIVERY_REMAIN_TIME"));
 
     }
 

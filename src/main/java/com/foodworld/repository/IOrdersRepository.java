@@ -23,4 +23,10 @@ public interface IOrdersRepository {
 
     Boolean createOrderDetails(OrderDetails orderDetails);
 
+    Boolean updateOrderStatus(String orderDetailsId, String status);
+
+    List<OrderDetails> getTodayOrderDetails();
+
+    List<OrderDetails> getOneWeekOrderDetails();
+
 }
